@@ -1,0 +1,137 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct
+{
+    int data;
+    struct node* next;
+
+}node;
+
+typedef struct
+{
+    node* top;
+
+}stack;
+
+stack* createStack()
+{
+    stack* s=(stack* )malloc(sizeof(stack));
+    s->top=NULL;
+    return s;
+}
+
+node* newnode(int x)
+{
+    node* n=(node* )malloc(sizeof(node));
+    n->data=x;
+    n->next=NULL;
+    return n;
+}
+void push(stack* s,int x)
+{
+    node* n=newnode(x);
+    if(s->top==NULL)
+        s->top=n;
+    else
+    {
+        n->next=s->top;
+        s->top=n;
+    }
+
+}
+
+int pop(stack* s)
+{
+    if(!isEmpty(s))
+    {
+        int x=s->top->data;
+        node* temp=s->top;
+        s->top=s->top->next;
+        free(temp);
+        return x;
+    }
+
+}
+
+int isEmpty(stack* s)
+{
+        return s->top==NULL;
+}
+
+void display(stack* s)
+{
+    if(isEmpty(s))
+        printf("\nSTACK IS EMPTY\n");
+    else
+    {
+        stack* temp=createStack();
+        while(!isEmpty(s))
+        {
+            int x=pop(s);
+            printf("%d ",x);
+            push(temp,x);
+        }
+        while(!isEmpty(temp))
+        {
+            push(s,pop(temp));
+        }
+        printf("\n");
+    }
+}
+
+stack* menu(stack* s)
+{
+
+    printf("                            ************************STACK MENU LOADED************************\n");
+    printf("choose an option:\n1.push\n2.pop\n3.display\n");
+    int n;
+    scanf("%d",&n);
+    int x;
+    switch (n)
+    {
+    case 1:
+        printf("enter the value you want to push: ");
+        scanf("%d",&x);
+        push(s,x);
+        break;
+    case 2:
+        if(isEmpty(s))
+        {
+            printf("THE STACK IS EMPTY\n");
+            break;
+        }
+
+        else
+        {
+            printf("output of the pop: %d\n",pop(s));
+            break;
+        }
+    case 3:
+        display(s);
+        break;
+
+    default:
+        printf("NO SUCH OPTION\n");
+
+    }
+
+    menu(s);
+
+
+
+}
+
+
+
+
+
+
+
+
+int main()
+{
+    stack* s=createStack();
+    menu(s);
+
+}
